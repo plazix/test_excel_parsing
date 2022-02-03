@@ -1,10 +1,10 @@
-import axios from "axios";
+import apiClient from "./http"
 
-const API_URL = "http://localhost:8000/api/auth";
+const API_URL = "/api/auth";
 
 class AuthService {
   login(username: string, password: string) {
-    return axios
+    return apiClient
       .post(API_URL, {
         username,
         password
