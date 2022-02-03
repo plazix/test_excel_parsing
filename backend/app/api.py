@@ -37,4 +37,4 @@ async def processing_items(user: User = Depends(get_current_user)):
 
 @api_router.post("/processing", tags=["Processing"])
 async def processing_new(file: UploadFile, user: User = Depends(get_current_user)):
-    return {}
+    return {"filename": file.filename}

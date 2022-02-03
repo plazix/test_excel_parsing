@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { Navigate } from "react-router-dom";
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+
+import UploadFile from "./UploadFile"
+
 import AuthService from "../../services/auth.service";
 import ProcessingService from "../../services/processing.service"
 
@@ -38,7 +43,15 @@ export default class Processing extends Component<Props, State> {
     }
 
     return (
-      <div>Processing</div>
+      <Container component="main">
+        <Box sx={{
+          backgroundColor: '#e3f2fd',
+          p: 2,
+          m: 2
+        }}>
+          <UploadFile />
+        </Box>
+      </Container>
     )
   }
 };
