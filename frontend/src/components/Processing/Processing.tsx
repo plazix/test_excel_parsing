@@ -4,9 +4,9 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 
 import UploadFile from "./UploadFile"
+import FileList from "./FileList";
 
 import AuthService from "../../services/auth.service";
-import ProcessingService from "../../services/processing.service"
 
 
 type Props = {};
@@ -31,7 +31,6 @@ export default class Processing extends Component<Props, State> {
 
   componentDidMount() {
     const currentUser = AuthService.getCurrentUser();
-    const list = ProcessingService.list();
 
     if (!currentUser) this.setState({ redirect: "/signin" });
     this.setState({ accessToken: "", userReady: true })
@@ -51,6 +50,8 @@ export default class Processing extends Component<Props, State> {
         }}>
           <UploadFile />
         </Box>
+
+        <FileList />
       </Container>
     )
   }

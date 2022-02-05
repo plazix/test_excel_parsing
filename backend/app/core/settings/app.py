@@ -3,7 +3,7 @@ import sys
 from typing import Any, Dict, List, Tuple
 
 from loguru import logger
-from pydantic import SecretStr
+from pydantic import SecretStr, DirectoryPath
 
 from app.core.logging import InterceptHandler
 from app.core.settings.base import BaseAppSettings
@@ -30,6 +30,9 @@ class AppSettings(BaseAppSettings):
 
     logging_level: int = logging.INFO
     loggers: Tuple[str, str] = ("uvicorn.asgi", "uvicorn.access")
+
+    database_url: str
+    upload_directory: DirectoryPath
 
     user_id: str = "0"
     user_username: str = ""

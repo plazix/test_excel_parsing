@@ -12,6 +12,9 @@ uvicorn = {extras = ["standard"], version = "^0.17.1"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 loguru = "^0.6.0"
 python-multipart = "^0.0.5"
+SQLAlchemy = "^1.4.31"
+alembic = "^1.7.6"
+aiofiles = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 
