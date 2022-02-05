@@ -64,7 +64,7 @@ class SignIn extends Component<Props, State> {
 
     AuthService.login(username, password).then(
       () => {
-        this.props.navigate("/processing", { replace: true });
+        this.props.navigate("/", { replace: true });
         //window.location.reload();
       },
       error => {

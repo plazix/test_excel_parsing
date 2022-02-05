@@ -20,7 +20,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/signin" element={<SignIn/>}/>
-          <Route path="/processing" element={<Processing/>}/>
+          <Route path="/" element={<Processing/>}/>
         </Routes>
       </main>
     </div>
