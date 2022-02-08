@@ -4,7 +4,7 @@ import hashlib
 from typing import List
 import aiofiles
 
-from fastapi import APIRouter, Response, status, File, UploadFile, Depends, HTTPException
+from fastapi import APIRouter, status, File, UploadFile, Depends, HTTPException, BackgroundTasks
 import sqlalchemy
 from sqlalchemy.orm import Session
 
@@ -13,6 +13,7 @@ from app.schemas import AuthRequest, User, ProcessingNewResponse, ProcessingItem
 from app.security import create_access_token, get_current_user
 from app.db.session import get_db
 from app.models import ProcessingFile, ProcessingStatus
+from app.tasks import excel_file_process
 
 
 settings = get_app_settings()
@@ -52,11 +53,13 @@ async def processing_items(
 
 @api_router.post("/processing", tags=["Processing"], response_model=ProcessingNewResponse)
 async def processing_new(
+        background_tasks: BackgroundTasks,
         file: UploadFile = File(...),
         user: User = Depends(get_current_user),
         db: Session = Depends(get_db)
 ):
-    filename = "tep_{}.tmp".format(hashlib.md5(file.filename.encode('utf-8')).hexdigest())
+    filename = "tep_{}.tmp"\
+        .format(hashlib.md5("{}_{}".format(file.filename, datetime.datetime.now()).encode('utf-8')).hexdigest())
     file_path = os.path.join(settings.upload_directory, filename)
     async with aiofiles.open(file_path, 'wb') as out_file:
         content = await file.read()
@@ -71,6 +74,8 @@ async def processing_new(
 
     db.add(proc_file)
     db.commit()
+
+    background_tasks.add_task(excel_file_process, proc_file.id, db)
 
     return ProcessingNewResponse(
         id=proc_file.id,

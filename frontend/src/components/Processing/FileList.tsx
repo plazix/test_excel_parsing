@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 import ProcessingService from "../../services/processing.service";
+import Typography from "@mui/material/Typography";
 
 
 type Props = {};
@@ -29,16 +30,11 @@ export default class FileList extends Component<Props, State> {
       };
   }
 
-  componentDidMount() {
-    this.setState({
-      files: [],
-      loading: true,
-      message: ""
-    });
-
+  refresh() {
     ProcessingService.list().then(
       (response) => {
         this.setState({
+          message: "",
           files: response.data,
           loading: false
         });
@@ -59,6 +55,18 @@ export default class FileList extends Component<Props, State> {
     );
   }
 
+  componentDidMount() {
+    this.setState({
+      files: [],
+      loading: true,
+      message: ""
+    });
+
+    this.refresh();
+
+    setInterval(() => this.refresh(), 1000);
+  }
+
   getStatusText(status: number): string {
     switch (status) {
       case 1: return "загружено";
@@ -73,34 +81,39 @@ export default class FileList extends Component<Props, State> {
     const { message, loading, files } = this.state;
 
     return (
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Uploaded At</TableCell>
-              <TableCell>Finished At</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Result</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {files.map((row) => (
-              <TableRow key={"id-row-" + row.id}>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.uploaded_at}</TableCell>
-                <TableCell>{row.finished_at}</TableCell>
-                <TableCell>{this.getStatusText(row.status)}</TableCell>
-                <TableCell>
-                  {row.state == 4 ? row.error : row.result}
-                </TableCell>
+      <div>
+        {message && (
+          <Typography color="error">{message}</Typography>
+        )}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Uploaded At</TableCell>
+                <TableCell>Finished At</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Result</TableCell>
+                <TableCell>Error</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {files.map((row) => (
+                <TableRow key={"id-row-" + row.id}>
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.uploaded_at}</TableCell>
+                  <TableCell>{row.finished_at}</TableCell>
+                  <TableCell>{this.getStatusText(row.status)}</TableCell>
+                  <TableCell>{row.result}</TableCell>
+                  <TableCell>{row.error}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     )
   }
 }

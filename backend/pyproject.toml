@@ -15,6 +15,9 @@ python-multipart = "^0.0.5"
 SQLAlchemy = "^1.4.31"
 alembic = "^1.7.6"
 aiofiles = "^0.8.0"
+pandas = "^1.4.0"
+openpyxl = "^3.0.9"
+xlrd = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 

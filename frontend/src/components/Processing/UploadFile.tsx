@@ -35,7 +35,8 @@ export default class UploadFile extends Component<Props, State> {
   }
 
   handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const fileList = e.target.files;
+    const fileInput = e.target;
+    const fileList = fileInput.files;
 
     this.setState({
       message: "",
@@ -44,6 +45,7 @@ export default class UploadFile extends Component<Props, State> {
     if (fileList && fileList.length > 0) {
       this.setState({selectedFile: fileList[0]});
       this.uploadFile(fileList[0]);
+      fileInput.value = "";
     }
   }
 
